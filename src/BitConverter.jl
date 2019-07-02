@@ -1,6 +1,6 @@
 module BitConverter
 
-export bytes, big, Int
+export bytes, to_big, to_int
 
 """
     bytes(x::Integer; len::Integer, little_endian::Bool)
@@ -98,9 +98,9 @@ input is considered big endian by default.
     1
 
 """
-function Core.Int(x::Vector{UInt8}; little_endian::Bool=false)
+function to_int(x::Vector{UInt8}; little_endian::Bool=false)
     if length(x) > 8
-        big(x)
+        to_big(x)
     else
         missing_zeros = div(Sys.WORD_SIZE, 8) -  length(x)
         if missing_zeros > 0
@@ -123,19 +123,22 @@ function Core.Int(x::Vector{UInt8}; little_endian::Bool=false)
 end
 
 """
-    Base.big(x::Vector{UInt8}) -> BigInt
+    to_big(x::Vector{UInt8}) -> BigInt
 
 Convert a Vector{UInt8} of any lenght to a BigInt.
 Considers the input a big endian.
 
 
-    julia> big([0x01, 0x00])
+    julia> to_big([0x01, 0x00])
     256
 
 """
-function Base.big(x::Vector{UInt8})
+function to_big(x::Vector{UInt8})
     hex = bytes2hex(x)
     return parse(BigInt, hex, base=16)
 end
 
 end # module
+
+@deprecate Int(x::Vector{UInt8}; little_endian::Bool) to_int(x; little_endian=little_endian)
+@deprecate big(x::Vector{UInt8}) to_big(x)

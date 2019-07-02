@@ -1,6 +1,6 @@
 # Alternative implementation
 
-function Base.Int(x::Vector{UInt8})
+function to_int(x::Vector{UInt8})
     if isempty(x)
         return 0
     end

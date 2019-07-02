@@ -9,7 +9,7 @@
         end
         @testset "Int()" begin
             for t in tests
-                @test Int(t[2]) == t[1]
+                @test to_int(t[2]) == t[1]
             end
         end
 end
