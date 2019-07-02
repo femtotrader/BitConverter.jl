@@ -7,6 +7,30 @@ export bytes, big, Int
     -> Vector{len, UInt8}
 
 Convert an Integer `x` to a Vector{UInt8}
+Options (not available for `x::BigInt`):
+- `len` to define a minimum Vector lenght in bytes, result will show no leading
+zero by default.
+- set `little_endian` to `true` for a result in little endian byte order, result
+in big endian order by default.
+
+
+    julia> bytes(32974)
+    2-element Array{UInt8,1}:
+     0x80
+     0xce
+
+    julia> bytes(32974, len=4)
+    4-element Array{UInt8,1}:
+     0x00
+     0x00
+     0x80
+     0xce
+
+    julia> bytes(32974, little_endian=true)
+    2-element Array{UInt8,1}:
+     0xce
+     0x80
+
 """
 function bytes(x::Integer; len::Integer=0, little_endian::Bool=false)
     result = reinterpret(UInt8, [hton(x)])
@@ -62,7 +86,17 @@ end
     Int(x::Vector{UInt8}; little_endian::Bool)
     -> Integer
 
-Convert a Vector{UInt8} to an Integer
+Convert a Vector{𝑙, UInt8} where 𝑙 ≤ 16 to an Integer of 128 bit max
+Optionally set `little_endian` to `true` if the input as such byte order,
+input is considered big endian by default.
+
+
+    julia> Int([0x01, 0x00])
+    256
+
+    julia> Int([0x01, 0x00], little_endian=true)
+    1
+
 """
 function Core.Int(x::Vector{UInt8}; little_endian::Bool=false)
     if length(x) > 8
@@ -91,7 +125,13 @@ end
 """
     Base.big(x::Vector{UInt8}) -> BigInt
 
-Convert a Vector{UInt8} to a BigInt
+Convert a Vector{UInt8} of any lenght to a BigInt.
+Considers the input a big endian.
+
+
+    julia> big([0x01, 0x00])
+    256
+
 """
 function Base.big(x::Vector{UInt8})
     hex = bytes2hex(x)
