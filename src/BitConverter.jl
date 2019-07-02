@@ -86,7 +86,7 @@ end
     Int(x::Vector{UInt8}; little_endian::Bool)
     -> Integer
 
-Convert a Vector{𝑙, UInt8} where 𝑙 ≤ 16 to an Integer of 128 bit max
+Convert a Vector{UInt8} an Integer, a BigInt above 64 bits
 Optionally set `little_endian` to `true` if the input as such byte order,
 input is considered big endian by default.
 
