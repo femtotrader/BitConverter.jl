@@ -31,7 +31,7 @@ julia> to_int(rand(UInt8, 8))
 
 ## Documentation
 
-https://braneproject.gitlab.io/bitconverter.jl
+https://braneproject.gitlab.io/BitConverter.jl
 
 ## Buy me a cup of coffee
 
