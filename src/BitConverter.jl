@@ -138,7 +138,8 @@ function to_big(x::Vector{UInt8})
     return parse(BigInt, hex, base=16)
 end
 
-end # module
-
+import Base: big, Int
 @deprecate Int(x::Vector{UInt8}; little_endian::Bool) to_int(x; little_endian=little_endian)
 @deprecate big(x::Vector{UInt8}) to_big(x)
+
+end # module
